@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <div className="flex justify-center items-center h-screen">
-      Hello next !
+      This is a next demo project
     </div>
   );
 }
