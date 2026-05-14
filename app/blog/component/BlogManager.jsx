@@ -4,20 +4,14 @@ import { useState } from "react";
 
 import BlogModal from "./BlogModal";
 
-import {
-  AddBlogButton,
-  EditButton,
-  DeleteButton,
-} from "./BlogActions";
+import { AddBlogButton, EditButton, DeleteButton } from "./BlogActions";
 
-export default function BlogManager({
-  blog,
-}) {
-  const [modalOpen, setModalOpen] =
-    useState(false);
+export default function BlogManager({ blog }) {
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
-  const [editMode, setEditMode] =
-    useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [editMode, setEditMode] = useState(false);
 
   const initialForm = {
     title: "",
@@ -28,8 +22,7 @@ export default function BlogManager({
     published: true,
   };
 
-  const [form, setForm] =
-    useState(initialForm);
+  const [form, setForm] = useState(initialForm);
 
   // Edit Open
   const openEdit = () => {
@@ -70,11 +63,10 @@ export default function BlogManager({
   const handleSubmit = async () => {
     try {
       if (editMode) {
-        await fetch(`/api/blog/${blog.slug}`, {
+        await fetch(`${BASE_URL}/api/blog/${blog.slug}`, {
           method: "PUT",
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(form),
         });
@@ -82,8 +74,7 @@ export default function BlogManager({
         await fetch(`/api/blog`, {
           method: "POST",
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(form),
         });
@@ -98,7 +89,7 @@ export default function BlogManager({
   // Delete
   const handleDelete = async () => {
     try {
-      await fetch(`/api/blog/${blog.slug}`, {
+      await fetch(`${BASE_URL}/api/blog/${blog.slug}`, {
         method: "DELETE",
       });
 
@@ -113,13 +104,9 @@ export default function BlogManager({
       <div className="mt-6 flex gap-3 flex-wrap">
         <EditButton onClick={openEdit} />
 
-        <DeleteButton
-          onClick={handleDelete}
-        />
+        <DeleteButton onClick={handleDelete} />
 
-        <AddBlogButton
-          onClick={openCreate}
-        />
+        <AddBlogButton onClick={openCreate} />
       </div>
 
       <BlogModal
