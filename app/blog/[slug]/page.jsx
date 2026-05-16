@@ -1,5 +1,7 @@
 // app/blogContent/[slug]/route
-import { getSingleBlog } from "@/lib/blogs";
+// import { getSingleBlog } from "../services/blog.service";
+import { getSingleBlog } from "@/services/blog.service";
+
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -60,11 +62,6 @@ export default async function SingleBlog({ params }) {
       <h2 className="text-center text-2xl font-bold">{blog.title}</h2>
 
       <picture className="w-full rounded-lg overflow-hidden">
-        {/* <img
-          src={blog.thumbnail}
-          alt={blog.title}
-          className="w-full rounded-lg"
-        /> */}
         <Image
           src={blog?.thumbnail}
           alt={blog.title}

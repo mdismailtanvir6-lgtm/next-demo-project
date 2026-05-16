@@ -1,5 +1,6 @@
 import BlogList from "./component/BlogList";
-import { getBlogs } from "../../lib/blogs";
+import { getBlogs } from "@/services/blog.service";
+import BlogManager from "./component/BlogManager";
 
 // =========== metadata for seo ========
 // const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -31,6 +32,7 @@ import { getBlogs } from "../../lib/blogs";
 // };
 
 // =========== main blog page component ========
+export const revalidate = 10; // প্রতি 10 সেকেন্ডে নতুন data fetch হবে
 export default async function BlogPage() {
   const blogs = await getBlogs();
 
@@ -40,9 +42,9 @@ export default async function BlogPage() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">All Blogs</h1>
+        <h1 className="text-3xl font-bold">All Blogs here</h1>
+        <BlogManager></BlogManager>
       </div>
-
       <BlogList blogs={blogs} isAdmin={isAdmin} />
     </div>
   );

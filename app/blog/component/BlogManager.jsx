@@ -1,18 +1,16 @@
 "use client";
 
 import { useState } from "react";
-
 import BlogModal from "./BlogModal";
-
 import { AddBlogButton, EditButton, DeleteButton } from "./BlogActions";
+import { useRouter } from "next/navigation";
+
 
 export default function BlogManager({ blog }) {
-  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
+  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
-
   const [editMode, setEditMode] = useState(false);
-
   const initialForm = {
     title: "",
     content: "",
@@ -21,7 +19,6 @@ export default function BlogManager({ blog }) {
     author: "Admin",
     published: true,
   };
-
   const [form, setForm] = useState(initialForm);
 
   // Edit Open
@@ -59,11 +56,11 @@ export default function BlogManager({ blog }) {
     }));
   };
 
-  // Submit
+  // ======== Edit blog and add blog ==========
   const handleSubmit = async () => {
     try {
       if (editMode) {
-        await fetch(`${BASE_URL}/api/blog/${blog.slug}`, {
+        await fetch(`/api/blog/${blog._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -80,25 +77,31 @@ export default function BlogManager({ blog }) {
         });
       }
 
-      window.location.reload();
+      setModalOpen(false);
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
   };
 
-  // Delete
+  // ======== delete blog ==========
   const handleDelete = async () => {
     try {
-      await fetch(`${BASE_URL}/api/blog/${blog.slug}`, {
+      const res = await fetch(`/api/blog/${blog._id}`, {
         method: "DELETE",
       });
 
-      window.location.reload();
+      if (!res.ok) {
+        throw new Error("Failed to delete blog");
+      }
+
+      router.refresh(); // only this
     } catch (error) {
       console.error(error);
     }
   };
 
+  // ======== Main ui here ==========
   return (
     <>
       <div className="mt-6 flex gap-3 flex-wrap">
